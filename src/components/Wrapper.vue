@@ -1,16 +1,16 @@
 <template>
     <div>
         <h1>Conversor de moedas</h1>
-        <Conversor />
+        <Converter />
     </div>
 </template>
 
 <script>
-import Conversor from "./Conversor.vue";
+import Converter from "./Converter.vue";
 
 export default {
     name: "Wrapper",
-    components: {Conversor}
+    components: {Converter}
 }
 </script>
 
