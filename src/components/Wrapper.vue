@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <h1>Conversor de moedas</h1>
+    <main class="wrapper">
+        <h1 class="title">Conversor de moedas</h1>
         <Converter />
-    </div>
+    </main>
 </template>
 
 <script>
@@ -15,5 +15,16 @@ export default {
 </script>
 
 <style scoped>
+    .title{
+        margin:1em 0;
+    }
+
+    .wrapper{
+        width: 90%;
+        margin: auto;
+        min-height: 100vh;
+        padding-top: 15vh;
+    }
+
 
 </style>
