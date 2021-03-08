@@ -51,8 +51,8 @@ export default {
         })
     },
     methods: {
-        convertValues: function(){
-            fetch(`https://api.exchangeratesapi.io/latest?base=${this.baseCurrency}&symbols=${this.toCurrency}`)
+        async convertValues(){
+            await fetch(`https://api.exchangeratesapi.io/latest?base=${this.baseCurrency}&symbols=${this.toCurrency}`)
             .then(response => response.json())
             .then(data => this.handleData(data))
             .catch(err => console.log(err))
