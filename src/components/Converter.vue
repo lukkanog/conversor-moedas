@@ -4,7 +4,7 @@
             <div class="box">
                 <div class="flex-group">
                     <label class="select">De 
-                        <select v-on:change="convertValues" class="input" name="baseCurrency" id="baseCurrency" v-model="baseCurrency">
+                        <select class="input" name="baseCurrency" id="baseCurrency" v-model="baseCurrency">
                             <option value="BRL">Real</option>
                             <option value="USD">Dólar Americano</option>
                             <option value="EUR">Euro</option>
@@ -19,7 +19,7 @@
                     </button>
 
                     <label class="select">Para 
-                        <select v-on:change="convertValues" class="input" name="toCurrency" id="toCurrency" v-model="toCurrency">
+                        <select  class="input" name="toCurrency" id="toCurrency" v-model="toCurrency">
                             <option value="BRL">Real</option>
                             <option value="USD">Dólar Americano</option>
                             <option value="EUR">Euro</option>
@@ -30,8 +30,8 @@
                     </label>
                 </div>
 
-            <input class="input" v-on:input="convertValues" type="number" step=".01" v-model="initialValue">
-            <p class="result">Resultado: {{convertedValue}}</p>
+            <input class="input"  type="number" step=".01" v-model="initialValue" placeholder="Insira o valor a ser convertido">
+            <p class="result">{{convertedValue ? convertedValue : `O resultado aparecerá aqui :D`}}</p>
 
             </div>
         
@@ -45,8 +45,9 @@ export default {
         return({
             baseCurrency: "BRL",
             toCurrency: "USD",
-            initialValue : 0,
-            convertedValue : 0,
+            initialValue : null,
+            currencyValue : null,
+            convertedValue : null,
         })
     },
     methods: {
@@ -58,20 +59,31 @@ export default {
         },
 
         handleData : function(data){
-            console.log(data)
-            const currencyValue = data.rates[this.toCurrency];
-            const convertedValue = this.initialValue * currencyValue;
+            this.currencyValue = data.rates[this.toCurrency];
+            const convertedValue = this.initialValue * this.currencyValue;
             
             this.convertedValue = (Math.round(convertedValue * 100) / 100).toFixed(2);
         },
 
         swapCurrencies : function(){
             [this.baseCurrency, this.toCurrency] = [this.toCurrency, this.baseCurrency];
-
-            this.convertValues();
-
         }
 
+    },
+    watch: {
+        initialValue : function() {
+            this.convertValues();
+        },
+
+        baseCurrency : function() {
+            this.convertValues();
+        },
+
+        toCurrency : function() {
+            this.convertValues();
+        },
+
+        
     }
 }
 </script>
@@ -124,6 +136,15 @@ export default {
     .result{
         font-weight: bolder;
         font-size: 1.5rem;
+    }
+
+    .result::before{
+        content: "";
+        display: block;
+        width: 100%;
+        background: #444;
+        height: 3px;
+        margin: .75rem 0;
     }
 
     .swap-button{
