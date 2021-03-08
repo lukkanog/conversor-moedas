@@ -4,7 +4,7 @@
             <div class="box">
                 <div class="flex-group">
                     <label class="select">De 
-                        <select v-on:change="convertValues" class="input" name="base" id="base" v-model="base">
+                        <select v-on:change="convertValues" class="input" name="baseCurrency" id="baseCurrency" v-model="baseCurrency">
                             <option value="BRL">Real</option>
                             <option value="USD">Dólar Americano</option>
                             <option value="EUR">Euro</option>
@@ -14,9 +14,12 @@
                         </select>
                     </label>
 
+                    <button v-on:click="swapCurrencies" class="swap-button">
+                        <img src="../assets/icons/swap-icon.svg" alt="">
+                    </button>
 
                     <label class="select">Para 
-                        <select v-on:change="convertValues" class="input" name="to" id="to" v-model="to">
+                        <select v-on:change="convertValues" class="input" name="toCurrency" id="toCurrency" v-model="toCurrency">
                             <option value="BRL">Real</option>
                             <option value="USD">Dólar Americano</option>
                             <option value="EUR">Euro</option>
@@ -40,26 +43,35 @@ export default {
     name: "Converter",
     data(){
         return({
-            base: "BRL",
-            to: "USD",
+            baseCurrency: "BRL",
+            toCurrency: "USD",
             initialValue : 0,
             convertedValue : 0,
         })
     },
     methods: {
-         convertValues: function(){
-             fetch(`https://api.exchangeratesapi.io/latest?base=${this.base}&symbols=${this.to}`)
+        convertValues: function(){
+            fetch(`https://api.exchangeratesapi.io/latest?base=${this.baseCurrency}&symbols=${this.toCurrency}`)
             .then(response => response.json())
             .then(data => this.handleData(data))
             .catch(err => console.log(err))
         },
 
         handleData : function(data){
-            const currencyValue = data.rates[this.to];
+            console.log(data)
+            const currencyValue = data.rates[this.toCurrency];
             const convertedValue = this.initialValue * currencyValue;
             
             this.convertedValue = (Math.round(convertedValue * 100) / 100).toFixed(2);
         },
+
+        swapCurrencies : function(){
+            [this.baseCurrency, this.toCurrency] = [this.toCurrency, this.baseCurrency];
+
+            this.convertValues();
+
+        }
+
     }
 }
 </script>
@@ -100,7 +112,7 @@ export default {
 
     .box{
         background-color: #333;
-        width: 50%;
+        width: 60%;
         height: 200px;
         padding: 1.5rem;
         border-radius: 15px;
@@ -113,4 +125,26 @@ export default {
         font-weight: bolder;
         font-size: 1.5rem;
     }
+
+    .swap-button{
+        width: 2.5rem;
+        margin: 0 .75rem;
+        transition: .25s;
+
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .swap-button:hover,
+    .swap-button:focus{
+        outline: none;
+        transform: scale(1.1);
+    }
+
+
+    .swap-button img{
+        width: 100%;
+    }
+
 </style>
