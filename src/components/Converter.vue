@@ -30,8 +30,10 @@
                     </label>
                 </div>
 
-            <input class="input"  type="number" step=".01" v-model="initialValue" placeholder="Insira o valor a ser convertido">
+            <input v-on:input="convertValues" class="input" type="number" step=".01" v-model="initialValue" placeholder="Insira o valor a ser convertido">
+
             <p class="result">{{convertedValue ? convertedValue : `O resultado aparecerá aqui :D`}}</p>
+
             <p class="date" v-if="date">Data da cotação: {{date}}</p>
             </div>
         
@@ -47,28 +49,27 @@ export default {
         return({
             baseCurrency: "BRL",
             toCurrency: "USD",
-            initialValue : null,
-            currencyValue : null,
-            convertedValue : null,
-            date: null,
+            initialValue : 0,
+            currencyValue : 0,
+            convertedValue : 0,
+            date: 0,
         })
     },
     methods: {
-        async convertValues(){
-            await fetch(`https://api.exchangeratesapi.io/latest?base=${this.baseCurrency}&symbols=${this.toCurrency}`)
+         convertValues(){
+             fetch(`https://api.exchangeratesapi.io/latest?base=${this.baseCurrency}&symbols=${this.toCurrency}`)
             .then(response => response.json())
             .then(data => this.handleData(data))
             .catch(err => console.log(err))
         },
 
         handleData : function(data){
-            const convertedValue = this.initialValue * this.currencyValue;
-
-            console.log(data)
-            this.date = formatDate(data.date);
             this.currencyValue = data.rates[this.toCurrency];
+
+            const convertedValue = this.initialValue * this.currencyValue;
             this.convertedValue = (Math.round(convertedValue * 100) / 100).toFixed(2);
-            
+
+            this.date = formatDate(data.date);
         },
 
         swapCurrencies : function(){
@@ -77,9 +78,7 @@ export default {
 
     },
     watch: {
-        initialValue : function() {
-            this.convertValues();
-        },
+
 
         baseCurrency : function() {
             this.convertValues();
