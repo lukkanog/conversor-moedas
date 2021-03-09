@@ -32,13 +32,15 @@
 
             <input class="input"  type="number" step=".01" v-model="initialValue" placeholder="Insira o valor a ser convertido">
             <p class="result">{{convertedValue ? convertedValue : `O resultado aparecerá aqui :D`}}</p>
-
+            <p class="date" v-if="date">Data da cotação: {{date}}</p>
             </div>
         
     </div>
 </template>
 
 <script>
+import formatDate from "../utils/formatDate";
+
 export default {
     name: "Converter",
     data(){
@@ -48,6 +50,7 @@ export default {
             initialValue : null,
             currencyValue : null,
             convertedValue : null,
+            date: null,
         })
     },
     methods: {
@@ -59,10 +62,13 @@ export default {
         },
 
         handleData : function(data){
-            this.currencyValue = data.rates[this.toCurrency];
             const convertedValue = this.initialValue * this.currencyValue;
-            
+
+            console.log(data)
+            this.date = formatDate(data.date);
+            this.currencyValue = data.rates[this.toCurrency];
             this.convertedValue = (Math.round(convertedValue * 100) / 100).toFixed(2);
+            
         },
 
         swapCurrencies : function(){
@@ -166,6 +172,12 @@ export default {
 
     .swap-button img{
         width: 100%;
+    }
+
+    .date{
+        color: #777;
+        position: relative;
+        margin-top: 2rem;
     }
 
 </style>
