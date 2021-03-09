@@ -1,24 +1,22 @@
-# conversor-moedas
+# Conversor de moedas
 
-## Project setup
-```
-yarn install
-```
+## Conversor de moedas - projeto para aprendizagem de Vue.js
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+### [Clique para ver o projeto em produção](https://https://conversor-moedas-vue.netlify.app/)
 
-### Compiles and minifies for production
-```
-yarn build
-```
 
-### Lints and fixes files
-```
-yarn lint
-```
+## Criado com:
+- Vue.js
+- [Exchange Rates API](https://github.com/exchangeratesapi/exchangeratesapi)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Ambiente de desenvolvimento
+Para rodar o sistema em ambiente de desenvolvimento:
+1. Clone esse repositório
+2. No terminal no repositório, execute o seguinte comandos:
+```
+yarn
+```  
+3. Em seguida, execute o comando:
+```
+yarn serve 
+```  
