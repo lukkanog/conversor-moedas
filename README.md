@@ -2,7 +2,7 @@
 
 ## Conversor de moedas - projeto para aprendizagem de Vue.js
 
-### [Clique para ver o projeto em produção](https://https://conversor-moedas-vue.netlify.app/)
+### [Clique para ver o projeto em produção](https://conversor-moedas-vue.netlify.app/)
 
 
 ## Criado com:
