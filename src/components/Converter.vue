@@ -30,7 +30,7 @@
                     </label>
                 </div>
 
-            <input v-on:input="convertValues" class="input" type="number" step=".01" v-model="initialValue" placeholder="Insira o valor a ser convertido">
+            <input class="input" type="number" step=".01" v-model="initialValue" placeholder="Insira o valor a ser convertido">
 
             <p class="result">{{convertedValue ? convertedValue : `O resultado aparecerá aqui :D`}}</p>
 
@@ -78,7 +78,9 @@ export default {
 
     },
     watch: {
-
+        initialValue : function() {
+            this.convertValues();
+        },
 
         baseCurrency : function() {
             this.convertValues();
