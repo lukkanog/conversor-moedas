@@ -181,4 +181,11 @@ export default {
         margin-top: 2rem;
     }
 
+    @media screen and (max-width: 800px) {
+        .box,
+        .converter{
+            width: 100%;
+        }
+    }
+
 </style>
