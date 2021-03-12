@@ -1,16 +1,24 @@
 <template>
   <div id="app">
-    <Wrapper />
+    <Wrapper>
+      <h1 class="title">Conversor de moedas</h1>
+      <Converter />
+      <Footer />
+    </Wrapper>
   </div>
 </template>
 
 <script>
-import Wrapper from "./components/Wrapper.vue";
+import Wrapper from "../components/Wrapper.vue";
+import Converter from "../components/Converter.vue";
+import Footer from "../components/Footer.vue";
 
 export default {
   name: 'App',
   components: {
-    Wrapper
+    Wrapper,
+    Converter,
+    Footer
   },
 }
 </script>
