@@ -1,41 +1,32 @@
 <template>
     <div class="converter">
+        <div class="box">
+            <div class="flex-group">
+                <label class="select">De 
+                    <select class="input" name="baseCurrency" id="baseCurrency" v-model="baseCurrency">
+                        <option value="" disabled>Selecione uma opção</option>
+                        <option v-for="currency in currencies" :key="currency">{{currency}}</option>
+                    </select>
+                </label>
 
-            <div class="box">
-                <div class="flex-group">
-                    <label class="select">De 
-                        <select class="input" name="baseCurrency" id="baseCurrency" v-model="baseCurrency">
-                            <option value="BRL">Real</option>
-                            <option value="USD">Dólar Americano</option>
-                            <option value="EUR">Euro</option>
-                            <option value="GBP">Libra Esterlina</option>
-                            <option value="CAD">Dólar Canadense</option>
-                            <option value="SEK">Coroa Sueca</option>
-                        </select>
-                    </label>
+                <button v-on:click="swapCurrencies" class="swap-button">
+                    <img src="../assets/icons/swap-icon.svg" alt="">
+                </button>
 
-                    <button v-on:click="swapCurrencies" class="swap-button">
-                        <img src="../assets/icons/swap-icon.svg" alt="">
-                    </button>
-
-                    <label class="select">Para 
-                        <select  class="input" name="toCurrency" id="toCurrency" v-model="toCurrency">
-                            <option value="BRL">Real</option>
-                            <option value="USD">Dólar Americano</option>
-                            <option value="EUR">Euro</option>
-                            <option value="GBP">Libra Esterlina</option>
-                            <option value="CAD">Dólar Canadense</option>
-                            <option value="SEK">Coroa Sueca</option>
-                        </select>
-                    </label>
-                </div>
+                <label class="select">Para 
+                    <select  class="input" name="toCurrency" id="toCurrency" v-model="toCurrency">
+                        <option value="" disabled>Selecione uma opção</option>
+                        <option v-for="currency in currencies" :key="currency">{{currency}}</option>
+                    </select>
+                </label>
+            </div>
 
             <input class="input" type="number" step=".01" v-model="initialValue" placeholder="Insira o valor a ser convertido">
 
             <p class="result">{{convertedValue ? convertedValue : `O resultado aparecerá aqui :D`}}</p>
 
             <p class="date" v-if="date">Data da cotação: {{date}}</p>
-            </div>
+        </div>
         
     </div>
 </template>
@@ -45,19 +36,26 @@ import formatDate from "../utils/formatDate";
 
 export default {
     name: "Converter",
+
+    mounted(){
+        this.getCurrencies();
+    },
+
     data(){
         return({
+            currencies: [],
             baseCurrency: "BRL",
             toCurrency: "USD",
-            initialValue : 0,
-            currencyValue : 0,
-            convertedValue : 0,
-            date: 0,
+            initialValue : null,
+            currencyValue : null,
+            convertedValue : null,
+            date: null,
         })
     },
+
     methods: {
-         convertValues(){
-             fetch(`https://api.exchangeratesapi.io/latest?base=${this.baseCurrency}&symbols=${this.toCurrency}`)
+        async convertValues(){
+            await fetch(`https://api.exchangeratesapi.io/latest?base=${this.baseCurrency}&symbols=${this.toCurrency}`)
             .then(response => response.json())
             .then(data => this.handleData(data))
             .catch(err => console.log(err))
@@ -74,23 +72,26 @@ export default {
 
         swapCurrencies : function(){
             [this.baseCurrency, this.toCurrency] = [this.toCurrency, this.baseCurrency];
+        },
+
+        async getCurrencies(){
+            await fetch(`https://api.exchangeratesapi.io/latest`)
+            .then(response => response.json())
+            .then(data => this.currencies = Object.keys(data.rates))
+            .catch(err => console.log(err))
         }
-
     },
+
+    computed : {
+        propertiesToWatch(){
+            return [this.baseCurrency, this.toCurrency, this.initialValue];
+        }
+    },
+
     watch: {
-        initialValue : function() {
+        propertiesToWatch(){
             this.convertValues();
         },
-
-        baseCurrency : function() {
-            this.convertValues();
-        },
-
-        toCurrency : function() {
-            this.convertValues();
-        },
-
-        
     }
 }
 </script>
